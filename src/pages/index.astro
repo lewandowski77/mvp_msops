@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('pl-PL', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+---
+
+<Layout title="MVP.Blog - Start">
+  <div class="max-w-3xl mx-auto px-6 py-16">
+    <!-- Hero Section -->
+    <section class="mb-16">
+      <div class="flex flex-col sm:flex-row items-start gap-8">
+        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-white text-4xl font-bold shrink-0">
+          AL
+        </div>
+        <div>
+          <h1 class="text-4xl font-bold text-zinc-900 mb-4">
+            Czesc, jestem <span class="text-accent">Artur</span>
+          </h1>
+          <p class="text-xl text-zinc-600 leading-relaxed mb-6">
+            Pasjonat technologii Microsoft, specjalizujacy sie w Dynamics 365 Business Central.
+            Dzielem sie wiedza o AI, automatyzacji i nowoczesnych rozwiazaniach dla biznesu.
+          </p>
+          <div class="flex gap-4">
+            <a
+              href="/about"
+              class="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white rounded-lg font-medium hover:bg-accent-light transition-colors"
+            >
+              Poznaj mnie
+            </a>
+            <a
+              href="/blog"
+              class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-200 text-zinc-700 rounded-lg font-medium hover:border-accent hover:text-accent transition-colors"
+            >
+              Czytaj blog
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest Posts -->
+    <section>
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-2xl font-bold text-zinc-900">Najnowsze wpisy</h2>
+        <a href="/blog" class="text-accent hover:text-accent-light font-medium text-sm">
+          Zobacz wszystkie &rarr;
+        </a>
+      </div>
+
+      {posts.length > 0 ? (
+        <div class="space-y-6">
+          {posts.map((post) => (
+            <article class="group">
+              <a href={`/blog/${post.id}`} class="block">
+                <div class="py-6 border-b border-zinc-100 transition-colors group-hover:border-accent/30">
+                  <h3 class="text-xl font-semibold text-zinc-900 group-hover:text-accent transition-colors mb-2">
+                    {post.data.title}
+                  </h3>
+                  <p class="text-zinc-600 mb-3 line-clamp-2">
+                    {post.data.description}
+                  </p>
+                  <div class="flex items-center gap-4 text-sm text-zinc-500">
+                    <time datetime={post.data.date.toISOString()}>
+                      {formatDate(post.data.date)}
+                    </time>
+                    {post.data.tags && (
+                      <div class="flex gap-2">
+                        {post.data.tags.slice(0, 2).map((tag: string) => (
+                          <span class="bg-zinc-100 px-2 py-0.5 rounded text-xs">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="text-zinc-500">Brak wpisow. Wkrotce pojawia sie nowe tresci!</p>
+      )}
+    </section>
+  </div>
+</Layout>
