@@ -1,0 +1,136 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Instrukcja | MVP.Blog" description="Instrukcja wdrozenia Astro na Cloudflare Pages">
+  <div class="max-w-3xl mx-auto px-6 py-16">
+    <article class="prose">
+      <h1>Wdrozenie strony Astro na Cloudflare Pages</h1>
+      <p class="text-xl text-zinc-600">Instrukcja krok po kroku jak wdrozyc projekt Astro na Cloudflare Pages.</p>
+
+      <h2>Wymagania</h2>
+      <ul>
+        <li>Konto na <a href="https://cloudflare.com" target="_blank">Cloudflare</a></li>
+        <li>Repozytorium GitHub z projektem Astro</li>
+        <li>Projekt Astro skonfigurowany z <code>npm run build</code> i outputem w folderze <code>dist</code></li>
+      </ul>
+
+      <hr class="my-8" />
+
+      <h2>Krok 1: Wejdz do panelu Cloudflare</h2>
+      <ol>
+        <li>Zaloguj sie na <a href="https://dash.cloudflare.com" target="_blank">dash.cloudflare.com</a></li>
+        <li>W menu po lewej wybierz <strong>Workers & Pages</strong></li>
+        <li>Kliknij <strong>Create application</strong></li>
+      </ol>
+      <img src="/images/docs/01-dashboard.png" alt="Dashboard Cloudflare" class="rounded-lg border border-zinc-200" />
+
+      <hr class="my-8" />
+
+      <h2>Krok 2: Wybierz Pages (nie Workers)</h2>
+      <p>Na ekranie "Ship something new" kliknij link <strong>"Looking to deploy Pages? Get started"</strong> na dole ekranu.</p>
+      <p class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-yellow-800">
+        <strong>Wazne:</strong> Nie wybieraj "Connect GitHub" z tego ekranu - to utworzy Worker, nie Pages.
+      </p>
+      <img src="/images/docs/02-connect-github.png" alt="Wybor metody" class="rounded-lg border border-zinc-200" />
+
+      <hr class="my-8" />
+
+      <h2>Krok 3: Polacz repozytorium GitHub</h2>
+      <ol>
+        <li>Wybierz zakladke <strong>GitHub</strong></li>
+        <li>Wybierz swoje konto GitHub</li>
+        <li>Znajdz i zaznacz repozytorium z projektem Astro</li>
+        <li>Kliknij <strong>Begin setup</strong></li>
+      </ol>
+      <img src="/images/docs/03-select-repo.png" alt="Wybor repozytorium" class="rounded-lg border border-zinc-200" />
+
+      <hr class="my-8" />
+
+      <h2>Krok 4: Skonfiguruj ustawienia buildu</h2>
+      <p>Ustaw nastepujace wartosci:</p>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr>
+              <th class="text-left">Pole</th>
+              <th class="text-left">Wartosc</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Project name</strong></td>
+              <td>nazwa-projektu</td>
+            </tr>
+            <tr>
+              <td><strong>Production branch</strong></td>
+              <td>main</td>
+            </tr>
+            <tr>
+              <td><strong>Framework preset</strong></td>
+              <td>Astro</td>
+            </tr>
+            <tr>
+              <td><strong>Build command</strong></td>
+              <td><code>npm run build</code></td>
+            </tr>
+            <tr>
+              <td><strong>Build output directory</strong></td>
+              <td><code>dist</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <img src="/images/docs/04-build-settings.png" alt="Ustawienia buildu" class="rounded-lg border border-zinc-200" />
+      <p>Kliknij <strong>Save and Deploy</strong>.</p>
+
+      <hr class="my-8" />
+
+      <h2>Krok 5: Poczekaj na deployment</h2>
+      <p>Cloudflare automatycznie:</p>
+      <ol>
+        <li>Sklonuje repozytorium</li>
+        <li>Zainstaluje zaleznosci</li>
+        <li>Zbuduje projekt</li>
+        <li>Wdrozy na globalna siec CDN</li>
+      </ol>
+      <img src="/images/docs/05-deployment.png" alt="Deployment" class="rounded-lg border border-zinc-200" />
+      <p>Po zakonczeniu strona bedzie dostepna pod adresem: <code>https://nazwa-projektu.pages.dev</code></p>
+
+      <hr class="my-8" />
+
+      <h2>Automatyczne deploymenty</h2>
+      <p>Po skonfigurowaniu, kazdy push do brancha <code>main</code> automatycznie:</p>
+      <ul>
+        <li>Uruchomi nowy build</li>
+        <li>Wdrozy nowa wersje strony</li>
+        <li>Zajmuje to okolo 30-60 sekund</li>
+      </ul>
+
+      <hr class="my-8" />
+
+      <h2>Rozwiazywanie problemow</h2>
+
+      <h3>Blad SSL (ERR_SSL_VERSION_OR_CIPHER_MISMATCH)</h3>
+      <p>To normalny blad dla nowych deploymentow. Cloudflare generuje certyfikat SSL - poczekaj 2-5 minut i odswiez strone.</p>
+
+      <h3>Build failed</h3>
+      <p>Sprawdz logi buildu w panelu Cloudflare:</p>
+      <ol>
+        <li>Wejdz w projekt</li>
+        <li>Kliknij <strong>Deployments</strong></li>
+        <li>Wybierz ostatni deployment</li>
+        <li>Zobacz <strong>Build log</strong></li>
+      </ol>
+
+      <hr class="my-8" />
+
+      <h2>Przydatne linki</h2>
+      <ul>
+        <li><a href="https://developers.cloudflare.com/pages/" target="_blank">Dokumentacja Cloudflare Pages</a></li>
+        <li><a href="https://docs.astro.build/" target="_blank">Dokumentacja Astro</a></li>
+        <li><a href="https://docs.astro.build/en/guides/deploy/cloudflare/" target="_blank">Astro + Cloudflare</a></li>
+      </ul>
+    </article>
+  </div>
+</Layout>
